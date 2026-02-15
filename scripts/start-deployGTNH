@@ -7,10 +7,11 @@
 function getGTNHdownloadPath(){
   gtnh_download_path=""
   current_java_version=$(mc-image-helper java-release)
-    
-  if ! mapfile -t packs < <(curl -sfL 'http://downloads.gtnewhorizons.com/ServerPacks/?raw'); then
-    logError "Failed to retrieve data from http://downloads.gtnewhorizons.com/ServerPacks/?raw"
-    exit 1
+
+  version_history_url='http://www.gtnewhorizons.com/version-history/'
+
+  if ! mapfile -t packs < <(curl -sfL "$version_history_url" | grep -oP 'https://downloads\.gtnewhorizons\.com/ServerPacks/GT_New_Horizons_[^"]*_Server_Java_[^"]*\.zip'); then
+    logError "Failed to retrieve data from $version_history_url"
   fi
 
   log "Start locating server files..."
